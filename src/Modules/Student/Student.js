@@ -7,10 +7,11 @@ class Student extends Component {
     render() {
         const { path } = this.props.match;
         return (
-            <div className="Exam">
+            <div className="Student">
                 <Switch>
+                    <Route path={`${path}/create`} component={CreateStudent} />
                     <Route path={`${path}`} component={ListStudent} />
-                    <Route path={`${path}`} component={CreateStudent} />
+                   
                 </Switch>
             </div>
         );

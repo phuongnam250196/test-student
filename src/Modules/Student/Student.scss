@@ -137,3 +137,17 @@
   button:focus, textarea:focus {
     box-shadow: none !important;
   }
+  .form-check-input {
+    position: unset !important;
+    margin-left: 0;
+  }
+  .text_err {
+    color: red;
+    font-size: 11px;
+    font-style: italic;
+    margin-bottom: 0;
+    position: absolute;
+  }
+  .btn-search {
+    cursor: pointer;
+  }

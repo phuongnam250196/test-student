@@ -40,7 +40,7 @@ class AppHeader extends React.Component {
                                     <DropdownItem onClick={()=>this.goTo('exam')}>Exam</DropdownItem>
                                     <DropdownItem onClick={()=>this.goTo('customer')}>Customer</DropdownItem>
                                     <DropdownItem onClick={()=>this.goTo('student')}>Student</DropdownItem>
-                                    <DropdownItem onClick={()=>this.goTo('create')}>Create Student</DropdownItem>
+                                    {/* <DropdownItem onClick={()=>this.goTo('create')}>Create Student</DropdownItem> */}
                                 </DropdownMenu>
                             </Dropdown>
                         </Row>

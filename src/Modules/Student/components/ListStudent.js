@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Form, InputGroupText, InputGroupAddon, Input, InputGroup,
+import { Container, Row, Col, InputGroupText, InputGroupAddon, Input, InputGroup,
     Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Table  } from 'reactstrap';
 import './../Student.scss';
 
 import logo from './../../../logo.png';
 
+import StudentService from './../Shared/StudentService';
 class ListStudent extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             dropdownOpen: false,
-            // prevState: false,
+            data: [],
         }
     }
 
+    componentDidMount() {
+        const data = StudentService.listStudent().then((res) => {
+            console.log('data - list', res.data);
+            this.setState({
+                data: res.data
+            })
+        }).catch(e => console.log('err', e));
+    }
+
     goTo = (url = '') => {
-        this.props.history.push(url);
+        window.location.assign('http://localhost:3000/app/student/create')
     }
 
     render() {
@@ -25,6 +35,25 @@ class ListStudent extends Component {
                 dropdownOpen: !this.state.dropdownOpen,
             })
         }
+        const { data } = this.state;
+        console.log('data render',  data);
+        let listStudent = data.map((student, index) => {
+            return (
+                <tr key={index}>
+                    <th scope="row">{ student.idIntern}</th>
+                    <td>{ student.fullName }</td>
+                    <td>{ student.birthday }</td>
+                    <td>{ student.phone }</td>
+                    <td>{ student.position }</td>
+                    <td>{ student.startDate }</td>
+                    <td><Input type="checkbox" /></td>
+                    <td>
+                        <button className="btn btn-success fix-btn">Sửa</button>
+                        <button className="btn btn-danger fix-btn">Xóa</button>
+                    </td>
+                </tr>
+            );
+        });
         return (
             <Container>
                 <Row>
@@ -69,36 +98,12 @@ class ListStudent extends Component {
                                     <th>Vị trí <i className="fa fa-caret-down" aria-hidden="true"></i></th>
                                     <th>Ngày bắt đầu <i className="fa fa-caret-down" aria-hidden="true"></i></th>
                                     <th>Đóng phụ phí</th>
-                                    <th><button onClick={()=>this.goTo('create')} className="btn btn-primary">Student</button></th>
+                                    <th><button onClick={()=>this.goTo('create')} className="btn btn-primary">Create Student</button></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">A25288</th>
-                                    <td>Nam trần</td>
-                                    <td>1996</td>
-                                    <td>0987166233</td>
-                                    <td>Frontend React</td>
-                                    <td>21/12/2021</td>
-                                    <td><Input type="checkbox" /></td>
-                                    <td>
-                                        <button className="btn btn-success fix-btn">Sửa</button>
-                                        <button className="btn btn-danger fix-btn">Xóa</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">A25288</th>
-                                    <td>Nam trần</td>
-                                    <td>1996</td>
-                                    <td>0987166233</td>
-                                    <td>Frontend React</td>
-                                    <td>21/12/2021</td>
-                                    <td><Input type="checkbox" /></td>
-                                    <td>
-                                        <button className="btn btn-success fix-btn">Sửa</button>
-                                        <button className="btn btn-danger fix-btn">Xóa</button>
-                                    </td>
-                                </tr>
+                                { listStudent }
+                                
                             </tbody>
                         </Table>
                     </Col>
