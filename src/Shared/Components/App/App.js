@@ -4,7 +4,6 @@ import AppHeader from '../AppHeader/AppHeader';
 import Exam from '../../../Modules/Exam/Exam';
 import ListCustomer from '../../../Modules/Customer/Components/ListCustomer';
 import Student from '../../../Modules/Student/Student';
-import CreateStudent from '../../../Modules/Student/components/CreateStudent';
 
 
 class App extends React.Component {
@@ -17,7 +16,6 @@ class App extends React.Component {
                     <Route path={`${path}/exam`} component={Exam} />
                     <Route path={`${path}/customer`} component={ListCustomer} />
                     <Route path={`${path}/student`} component={Student} />
-                    {/* <Route path={`${path}/create`} component={CreateStudent} /> */}
                 </Switch>
             </div>
         );

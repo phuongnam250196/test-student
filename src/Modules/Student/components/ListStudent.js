@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, InputGroupText, InputGroupAddon, Input, InputGroup,
-    Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Table  } from 'reactstrap';
+import { Container, Row, Col, Input, Table  } from 'reactstrap';
 import './../Student.scss';
-
-import logo from './../../../logo.png';
-
 import StudentService from './../Shared/StudentService';
+import SearchHeader from './Search/SearchHeader';
+
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
+
 class ListStudent extends Component {
     constructor(props) {
         super(props);
@@ -13,12 +15,13 @@ class ListStudent extends Component {
         this.state = {
             dropdownOpen: false,
             data: [],
+            keyword: '',
         }
     }
 
     componentDidMount() {
         const data = StudentService.listStudent().then((res) => {
-            console.log('data - list', res.data);
+            // console.log('data - list', res.data);
             this.setState({
                 data: res.data
             })
@@ -26,17 +29,51 @@ class ListStudent extends Component {
     }
 
     goTo = (url = '') => {
-        window.location.assign('http://localhost:3000/app/student/create')
+        this.props.history.push(url);
+    }
+
+    onSearch = (keyword) => {
+        console.log('keyword', keyword);
+        this.setState({
+            keyword
+        });
+    }
+
+    onDelete = (e, id) => {
+        const { data } = this.state;
+        confirmAlert({
+            title: 'Xóa sinh viên',
+            message: 'Bạn có chắc chắn muốn xóa không?',
+            buttons: [
+              {
+                label: 'Xác nhận',
+                onClick: () => {
+                    console.log('delete', id)
+                    StudentService.deleteStudent(id).then((res) => {
+                        // console.log('res', res)
+                        for (let i in data) {
+                            if (data[i].id === res.data.id) {
+                                data.splice(i, 1);
+                            }
+                        }
+                        this.setState({
+                            data
+                        })
+                    }).catch(e => console.log(e))
+                }
+              },
+              {
+                label: 'Hủy bỏ',
+                onClick: () => console.log('Click No')
+              }
+            ]
+          });
+        
     }
 
     render() {
-        const toggle = () => {
-            this.setState({
-                dropdownOpen: !this.state.dropdownOpen,
-            })
-        }
-        const { data } = this.state;
-        console.log('data render',  data);
+        const { data, keyword } = this.state;
+        // console.log('data render',  data, keyword);
         let listStudent = data.map((student, index) => {
             return (
                 <tr key={index}>
@@ -46,46 +83,20 @@ class ListStudent extends Component {
                     <td>{ student.phone }</td>
                     <td>{ student.position }</td>
                     <td>{ student.startDate }</td>
-                    <td><Input type="checkbox" /></td>
+                    <td><Input type="checkbox" /></td>  
                     <td>
-                        <button className="btn btn-success fix-btn">Sửa</button>
-                        <button className="btn btn-danger fix-btn">Xóa</button>
+                        <div className="d-flex">
+                            <button onClick={()=>this.goTo('update?id='+student.id)} className="btn btn-success fix-btn">Sửa</button>
+                            <button onClick={(e) => this.onDelete(e, student.id)} className="btn btn-danger fix-btn">Xóa</button>
+                        </div>
                     </td>
                 </tr>
             );
         });
         return (
             <Container>
-                <Row>
-                    <Col sm={2}>
-                        <img src={logo}  alt="" className="header_logo" />
-                    </Col>
-                    <Col sm={8}>
-                        <div className="header_search">
-                            <InputGroup>
-                                <InputGroupAddon addonType="prepend">
-                                    <InputGroupText><i className="fa fa-search" aria-hidden="true"></i></InputGroupText>
-                                </InputGroupAddon>
-                                <Input className="header_search_input" placeholder="Tìm kiếm theo mã, số điện thoại" />
-                                <InputGroupAddon addonType="append">
-                                    <InputGroupText><i className="fa fa-microphone" aria-hidden="true"></i></InputGroupText>
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </div>
-                    </Col>
-                    <Col sm={2}>
-                        <Dropdown isOpen={this.state.dropdownOpen} toggle={toggle} className="dropdown-fix">
-                            <DropdownToggle caret>
-                                Chào, Nam
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem>Đổi mật khẩu</DropdownItem>
-                                <DropdownItem>Thông tin</DropdownItem>
-                                <DropdownItem>Đăng xuất</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </Col>
-                </Row>
+                <SearchHeader onSearch={(keyword) => this.onSearch(keyword) } />
+
                 <Row>
                     <Col sm={12}>
                         <Table bordered striped hover className="table-list">
@@ -98,7 +109,7 @@ class ListStudent extends Component {
                                     <th>Vị trí <i className="fa fa-caret-down" aria-hidden="true"></i></th>
                                     <th>Ngày bắt đầu <i className="fa fa-caret-down" aria-hidden="true"></i></th>
                                     <th>Đóng phụ phí</th>
-                                    <th><button onClick={()=>this.goTo('create')} className="btn btn-primary">Create Student</button></th>
+                                    <th><button onClick={()=>this.goTo('create')} className="btn btn-primary">Thêm mới</button></th>
                                 </tr>
                             </thead>
                             <tbody>

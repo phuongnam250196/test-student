@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Form, InputGroupText, InputGroupAddon, Input, InputGroup,
-    Label, FormGroup, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem  } from 'reactstrap';
-
+import { Container, Row, Col, Form, Input, Label, FormGroup, Button } from 'reactstrap';
 import './../Student.scss';
-import logo from './../../../logo.png';
-
-import StudentService from './../Shared/StudentService';
+import StudentService from '../Shared/StudentService';
+import SearchHeader from './Search/SearchHeader';
 
 class CreateStudent extends Component {
     constructor(props) {
@@ -13,7 +10,6 @@ class CreateStudent extends Component {
         this.state = {
             fields: {},
             errors: {},
-            keyword: '',
             dropdownOpen: false
         }
     }
@@ -151,17 +147,7 @@ class CreateStudent extends Component {
         console.log('data', this.state)
     }
 
-    onChangeSearch = (e) => {
-        const target = e.target;
-        const value = target.value;
-        this.setState({
-            keyword: value
-        })
-    }
-
-    onSearch = () => {
-        console.log('keyword', this.state.keyword)
-    }
+    
 
     onResetStudent = () => {
         console.log(2)
@@ -177,36 +163,7 @@ class CreateStudent extends Component {
             // console.log('render err', fields["idIntern"], this.state.errors)
         return (
             <Container>
-            <Row>
-                <Col sm={2}>
-                    <img src={logo}  alt="" className="header_logo" />
-                </Col>
-                <Col sm={8}>
-                    <div className="header_search">
-                        <InputGroup>
-                            <InputGroupAddon addonType="prepend">
-                                <InputGroupText><i className="fa fa-search" aria-hidden="true"></i></InputGroupText>
-                            </InputGroupAddon>
-                            <Input className="header_search_input" onChange={ (e) => this.onChangeSearch(e) } name="keyword" placeholder="Tìm kiếm theo mã, số điện thoại" />
-                            <InputGroupAddon addonType="append">
-                                <InputGroupText><i className="fa fa-microphone btn-search" onClick={this.onSearch} aria-hidden="true"></i></InputGroupText>
-                            </InputGroupAddon>
-                        </InputGroup>
-                    </div>
-                </Col>
-                <Col sm={2}>
-                    <Dropdown isOpen={dropdownOpen} toggle={toggle} className="dropdown-fix">
-                        <DropdownToggle caret>
-                            Chào, Nam
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem>Đổi mật khẩu</DropdownItem>
-                            <DropdownItem>Thông tin</DropdownItem>
-                            <DropdownItem>Đăng xuất</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                </Col>
-            </Row>
+            <SearchHeader />
             <Form className="form-parent">
                 <Row>
                     <Col xs={6}>
