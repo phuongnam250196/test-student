@@ -16,6 +16,7 @@ class ListStudent extends Component {
             dropdownOpen: false,
             data: [],
             keyword: '',
+            provinces: {},
         }
     }
 
@@ -26,6 +27,7 @@ class ListStudent extends Component {
                 data: res.data
             })
         }).catch(e => console.log('err', e));
+        
     }
 
     goTo = (url = '') => {

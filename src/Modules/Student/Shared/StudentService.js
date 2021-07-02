@@ -3,9 +3,11 @@ import { Http } from "../../../Helper/Http";
 const API_ENDPOINT = {
   LIST_STUDENT: '/student/student/list',
   CREATE_STUDENT: '/student/student/create',
-  DELETE_STUDENT: '/student/student/delete?id=',
+  DELETE_STUDENT: '/student/student/delete',
   UPDATE_STUDENT:'/student/student/update',
-  GET_STUDENT: '/student/student/get'
+  GET_STUDENT: '/student/student/get',
+  LIST_REGION: '/tool/tool/region/list',
+  LIST_SCHOOL: '/tool/tool/school/list',
 }
 
 class StudentService {
@@ -40,7 +42,17 @@ class StudentService {
   // DELETE
   deleteStudent(id) {
     console.log('id api', id)
-    return Http.get(API_ENDPOINT.DELETE_STUDENT+id);
+    return Http.get(`${API_ENDPOINT.DELETE_STUDENT}?id=`);
+  }
+
+  // GET
+  listRegion(type, value) {
+    return Http.get(`${API_ENDPOINT.LIST_REGION}?type=${type}&value=${value}`);
+  }
+
+   // GET
+   listSchool(type, value) {
+    return Http.get(`${API_ENDPOINT.LIST_SCHOOL}?type=${type}&value=${value}`);
   }
 
 }

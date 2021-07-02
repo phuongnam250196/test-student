@@ -10,6 +10,8 @@ class CreateStudent extends Component {
         this.state = {
             fields: {},
             errors: {},
+            provinces: [],
+            schools: [],
             dropdownOpen: false
         }
     }
@@ -22,6 +24,20 @@ class CreateStudent extends Component {
         fields[name] = value;
         this.setState({
             fields
+        })
+    }
+
+    componentDidMount() {
+        StudentService.listRegion("province", "vn").then((res) => {
+            this.setState({
+                provinces: res.data
+            });
+        })
+
+        StudentService.listSchool("mb", "vn").then((res) => {
+            this.setState({
+                schools: res.data
+            });
         })
     }
 
@@ -159,8 +175,23 @@ class CreateStudent extends Component {
                 dropdownOpen: !this.state.dropdownOpen,
             })
         }
-        let { dropdownOpen, fields, errors } = this.state;
+        let { dropdownOpen, fields, errors, provinces, schools } = this.state;
+        console.log("province", provinces);
             // console.log('render err', fields["idIntern"], this.state.errors)
+        let listProvinces = provinces.map((province) => {
+            return (
+                <>
+                    <option value={province.id}>{ province.name }</option>
+                </>
+            );
+        });
+        let listSchools = schools.map((school) => {
+            return (
+                <>
+                    <option value={school.id}>{ school.name }</option>
+                </>
+            );
+        });
         return (
             <Container>
             <SearchHeader />
@@ -202,8 +233,7 @@ class CreateStudent extends Component {
                             <Col sm={9}>
                                 <Input type="select" onChange={(e) => this.onChange(e) } name="homeTown" id="home-town">
                                     <option value="">-- Chọn --</option>
-                                    <option value="hn">Hà Nội</option>
-                                    <option value="hcm">Hồ Chí Minh</option>
+                                    { listProvinces }
                                 </Input>
                                 <p className="text_err">{ errors.homeTown }</p>
                             </Col>
@@ -222,8 +252,7 @@ class CreateStudent extends Component {
                             <Col sm={9}>
                                 <Input type="select" onChange={(e) => this.onChange(e) } name="school" id="school">
                                     <option value="">-- Chọn --</option>
-                                    <option value="tlu">TLU</option>
-                                    <option value="neu">Kinh tế quốc dân</option>
+                                    { listSchools }
                                 </Input>
                                 <p className="text_err">{ errors.school }</p>
                             </Col>
